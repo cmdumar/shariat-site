@@ -11,22 +11,21 @@ import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
 function Seo({ description, lang, meta, title }) {
-  const { site } = useStaticQuery(
+  const { wpgraphql } = useStaticQuery(
     graphql`
-      query {
-        site {
-          siteMetadata {
+      {
+        wpgraphql {
+          generalSettings {
             title
             description
-            author
           }
         }
       }
     `
-  )
+  );
 
-  const metaDescription = description || site.siteMetadata.description
-  const defaultTitle = site.siteMetadata?.title
+  const metaDescription = description || wpgraphql.generalSettings.description
+  const defaultTitle = wpgraphql.generalSettings?.title
 
   return (
     <Helmet
@@ -58,7 +57,7 @@ function Seo({ description, lang, meta, title }) {
         },
         {
           name: `twitter:creator`,
-          content: site.siteMetadata?.author || ``,
+          content: wpgraphql.generalSettings.author || ``,
         },
         {
           name: `twitter:title`,
@@ -86,4 +85,4 @@ Seo.propTypes = {
   title: PropTypes.string.isRequired,
 }
 
-export default Seo
+export default Seo;

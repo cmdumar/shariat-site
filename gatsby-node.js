@@ -1,9 +1,48 @@
-exports.createPages = async ({ actions }) => {
-  const { createPage } = actions
-  createPage({
-    path: "/using-dsg",
-    component: require.resolve("./src/templates/using-dsg.js"),
-    context: {},
-    defer: true,
-  })
+exports.createPages = async gatsbyUtilities => {
+  const categories = await getCategories(gatsbyUtilities);
+
+  if(!categories.length) {
+      return;
+  }
+
+  await createIndiviualCategoryPages({ categories, gatsbyUtilities })
+}
+
+const createIndiviualCategoryPages = async ({ categories, gatsbyUtilities }) => 
+  Promise.all(
+      categories.map(category => 
+          gatsbyUtilities.actions.createPage({
+              path: category.uri,
+              component: require.resolve('./src/templates/category-template.js'),
+              context: {
+                  id: category.id
+              },
+          })
+      )
+  )
+
+
+const getCategories = async ({ graphql, reporter }) => {
+  const graphqlResult = await graphql(`
+    {
+      wpgraphql {
+        categories {
+          nodes {
+            id
+            uri
+          }
+        }
+      }
+    }
+  `);
+
+  if (graphqlResult.errors) {
+      reporter.panicOnBuild(
+        `There was an error loading your blog posts`,
+        graphqlResult.errors
+      )
+      return;
+  }
+
+  return graphqlResult.data.wpgraphql.categories.nodes;
 }

@@ -11,45 +11,47 @@ import { useStaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
 import "./layout.css"
+import { Box, Container } from "@chakra-ui/react"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, bg }) => {
   const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
+    {
+      wpgraphql {
+        generalSettings {
           title
         }
       }
     }
-  `)
+  `);
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
+      <Header siteTitle={data.wpgraphql.generalSettings?.title || `Title`} />
+      <Container bg={bg} width="full" maxW="full" px="0" pb="4">
+        {children}
+      </Container>
+      <Box
+        as="footer"
+        bg="gray.800"
+        color="white"
+        py="30"
+        textAlign="center"
       >
-        <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
+        © {new Date().getFullYear()}
+        {` `}
+        Shariat.info
+      </Box>
     </>
   )
-}
+};
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-}
+  bg: PropTypes.string,
+};
+
+Layout.defaultProps = {
+  bg: "#ffffff",
+};
 
 export default Layout

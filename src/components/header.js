@@ -1,35 +1,36 @@
-import * as React from "react"
-import PropTypes from "prop-types"
-import { Link } from "gatsby"
+import * as React from "react";
+import PropTypes from "prop-types";
+import { Link } from "gatsby";
+import Menu from "./menu";
+import logo from '../images/logo.png';
+import { Box, Image } from "@chakra-ui/react";
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
+const Header = () => (
+  <Box
+    as="header"
+    display="flex"
+    alignItems="center"
+    justifyContent="space-between"
+    px="20"
+    py="4"
   >
-    <div
+    <Link
+      to="/"
       style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
+        display: 'inline-block',
       }}
     >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
+      <Image
+        src={logo}
+        alt="Shariat.info Logo"
+        style={{
+          width: 'calc(25vw - 25px)',
+        }}
+      />
+    </Link>
+    <Menu />
+  </Box>
+);
 
 Header.propTypes = {
   siteTitle: PropTypes.string,
@@ -39,4 +40,4 @@ Header.defaultProps = {
   siteTitle: ``,
 }
 
-export default Header
+export default Header;
